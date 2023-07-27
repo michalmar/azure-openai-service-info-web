@@ -20,6 +20,41 @@ function convertUnixTimestamp(unixTimestamp) {
 }
 
 
+async function fetchModels() {
+
+    // const query = `
+    //     {
+    //       openai {
+    //         items {
+    //           id
+    //           data
+    //         }
+    //       }
+    //     }`;
+
+        const query = `
+        {
+          people {
+            items {
+              id
+              Name
+            }
+          }
+        }`;
+        
+        
+    const endpoint = "http://localhost:4280/data-api/graphql";
+    const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: query })
+    });
+    const result = await response.json();
+    // console.table(result.data.openai.items);
+    console.table(result.data.people.items);
+  }
+
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -603,6 +638,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+
+
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Grid xs={8}>
@@ -645,7 +682,7 @@ function App() {
               </Item>
             </Grid>
             <Grid xs={2}>
-              <Item><Button variant="contained">Hello World</Button></Item>
+              <Item><Button onClick={fetchModels} variant="contained">Hello World</Button></Item>
             </Grid>
           </Grid>
         </Box>
